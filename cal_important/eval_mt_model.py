@@ -29,7 +29,7 @@ device = torch.device("cuda:0")
 device2 = torch.device("cuda:1")
 
 
-model_name = "deepseek-ai/deepseek-moe-16b-base"
+model_name = "deepseek-ai/DeepSeek-V2-Lite"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.bfloat16, device_map="auto", trust_remote_code=True)
 model.generation_config = GenerationConfig.from_pretrained(model_name)
@@ -137,19 +137,19 @@ output_name = type_name if type_name != "none" else args.data
 output_name = output_name if "/" not in output_name else output_name.split("/")[-1]
 
 with open(
-    f"/mnt/deepseek/cal_important/resutls/mmlu_new/{output_name}.json", "w"
+    f"/mnt/deepseek/cal_important/resutls/{output_name}.json", "w"
 ) as fw:
     json.dump(expert_dict, fw, indent=4)
 
 
 
 """
-CUDA_VISIBLE_DEVICES=6,5 nohup python eval_mt_model.py winogrande winogrande_debiased test 3 --sub_one sentence --sub_two option1 --sub_three option2 > ./log/raw/winogrande_debiased.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=5,6 nohup python eval_mt_model.py Rowan/hellaswag none test 3 --sub_one ctx_a --sub_two ctx_b --sub_three activity_label > ./log/raw/hellaswag.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=0,1,2,3 nohup python eval_mt_model.py truthful_qa generation validation 2 --sub_one question --sub_two best_answer > ./log/raw/generation.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=0,4 nohup python eval_mt_model.py truthful_qa multiple_choice validation 3 --sub_one question --sub_two mc1_targets --sub_three mc2_targets > ./log/raw/multiple_choice.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=4,3 nohup python eval_mt_model.py gsm8k main test 2 --sub_one question --sub_two answer > ./log/raw/main.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=4,3 nohup python eval_mt_model.py gsm8k socratic test 2 --sub_one question --sub_two answer > ./log/raw/socratic.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=3,4 nohup python eval_mt_model.py piqa none test 3 --sub_one goal --sub_two sol1 --sub_three sol2 > ./log/raw/piqa.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=6 nohup python eval_mt_model.py winogrande winogrande_debiased test 3 --sub_one sentence --sub_two option1 --sub_three option2 > ./log/raw/winogrande_debiased.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=5 nohup python eval_mt_model.py Rowan/hellaswag none test 3 --sub_one ctx_a --sub_two ctx_b --sub_three activity_label > ./log/raw/hellaswag.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=0 nohup python eval_mt_model.py truthful_qa generation validation 2 --sub_one question --sub_two best_answer > ./log/raw/generation.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=0 nohup python eval_mt_model.py truthful_qa multiple_choice validation 3 --sub_one question --sub_two mc1_targets --sub_three mc2_targets > ./log/raw/multiple_choice.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=4 nohup python eval_mt_model.py gsm8k main test 2 --sub_one question --sub_two answer > ./log/raw/main.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=4 nohup python eval_mt_model.py gsm8k socratic test 2 --sub_one question --sub_two answer > ./log/raw/socratic.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=3 nohup python eval_mt_model.py piqa none test 3 --sub_one goal --sub_two sol1 --sub_three sol2 > ./log/raw/piqa.lb 2>&1 &
 
 """
