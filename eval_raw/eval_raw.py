@@ -28,9 +28,9 @@ args = parser.parse_args()
 device = torch.device("cuda")
 
 
-model_name = "deepseek-ai/deepseek-moe-16b-base"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.bfloat16, device_map="auto", trust_remote_code=True)
+model_name = "deepseek-ai/DeepSeek-V2-Lite"
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, torch_dtype=torch.bfloat16, device_map="auto")
 model.generation_config = GenerationConfig.from_pretrained(model_name)
 model.generation_config.pad_token_id = model.generation_config.eos_token_id
 
@@ -118,7 +118,7 @@ output_name = type_name if type_name != "none" else args.data
 output_name = output_name if "/" not in output_name else output_name.split("/")[-1]
 
 with open(
-    f"/mnt/deepseekv2/eval_raw/resutls/raw/mmlu/{output_name}.json", "w"
+    f"/mnt/deepseekv2/eval_raw/resutls/mmlu/{output_name}.json", "w"
 ) as fw:
     json.dump(full_expert_dict, fw, indent=4)
 
