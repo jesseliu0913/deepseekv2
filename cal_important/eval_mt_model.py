@@ -149,7 +149,7 @@ CUDA_VISIBLE_DEVICES=4,0 nohup python eval_mt_model.py Rowan/hellaswag none test
 CUDA_VISIBLE_DEVICES=6,7 nohup python eval_mt_model.py truthful_qa generation validation 2 --sub_one question --sub_two best_answer > ./log/raw/generation.lb 2>&1 &
 CUDA_VISIBLE_DEVICES=1,3 nohup python eval_mt_model.py truthful_qa multiple_choice validation 3 --sub_one question --sub_two mc1_targets --sub_three mc2_targets > ./log/raw/multiple_choice.lb 2>&1 &
 CUDA_VISIBLE_DEVICES=5,1 nohup python eval_mt_model.py gsm8k main test 2 --sub_one question --sub_two answer > ./log/raw/main.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=4 nohup python eval_mt_model.py gsm8k socratic test 2 --sub_one question --sub_two answer > ./log/raw/socratic.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=3 nohup python eval_mt_model.py piqa none test 3 --sub_one goal --sub_two sol1 --sub_three sol2 > ./log/raw/piqa.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=3,6 nohup python eval_mt_model.py gsm8k socratic test 2 --sub_one question --sub_two answer > ./log/raw/socratic.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=1,3 nohup python eval_mt_model.py piqa none test 3 --sub_one goal --sub_two sol1 --sub_three sol2 > ./log/raw/piqa.lb 2>&1 &
 
 """
