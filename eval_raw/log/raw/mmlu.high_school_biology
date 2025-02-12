@@ -1,0 +1,26 @@
+nohup: ignoring input
+[2025-02-12 21:07:32,514] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-dev package with apt
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+Traceback (most recent call last):
+  File "/mnt/deepseekv2/eval_raw/eval_raw_model.py", line 7, in <module>
+    from deepspeed.pipe import PipelineModule
+  File "/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/deepspeed/ops/__init__.py", line 15, in <module>
+    from ..git_version_info import compatible_ops as __compatible_ops__
+  File "/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/deepspeed/git_version_info.py", line 29, in <module>
+    op_compatible = builder.is_compatible()
+  File "/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/deepspeed/ops/op_builder/fp_quantizer.py", line 29, in is_compatible
+    sys_cuda_major, _ = installed_cuda_version()
+  File "/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/deepspeed/ops/op_builder/builder.py", line 47, in installed_cuda_version
+    import torch.utils.cpp_extension
+  File "/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/torch/utils/cpp_extension.py", line 22, in <module>
+    from .hipify import hipify_python
+  File "/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/torch/utils/hipify/hipify_python.py", line 784, in <module>
+    CAFFE2_TRIE.add(src)
+  File "/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/torch/utils/hipify/hipify_python.py", line 683, in add
+    node.children.setdefault(char, TrieNode())
+KeyboardInterrupt

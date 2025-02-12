@@ -1,0 +1,13 @@
+nohup: ignoring input
+[2025-02-12 21:49:44,239] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/huggingface_hub/file_download.py:795: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-dev package with apt
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m NVIDIA Inference is only supported on Ampere and newer architectures
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.0), only 1.0.0 is known to be compatible
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:08,  2.99s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:06<00:06,  3.07s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:09<00:03,  3.14s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:11<00:00,  2.73s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:11<00:00,  2.86s/it]
