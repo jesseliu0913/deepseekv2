@@ -118,7 +118,7 @@ output_name = type_name if type_name != "none" else args.data
 output_name = output_name if "/" not in output_name else output_name.split("/")[-1]
 
 with open(
-    f"/mnt/deepseekv2/eval_raw/resutls/{output_name}.json", "w"
+    f"/mnt/deepseekv2/eval_raw/results/{output_name}.json", "w"
 ) as fw:
     json.dump(full_expert_dict, fw, indent=4)
 
