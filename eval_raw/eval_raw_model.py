@@ -63,7 +63,7 @@ def get_layer_output(module, input, output):
 
 
 type_name = args.dataset 
-dataset = load_dataset(args.data, type_name) if type_name != 'none' else load_dataset(args.data)
+dataset = load_dataset(args.data, type_name, trust_remote_code=True) if type_name != 'none' else load_dataset(args.data, trust_remote_code=True)
 test_data = dataset[args.subset]
 
 output_name = type_name if type_name != "none" else args.data
@@ -118,7 +118,7 @@ output_name = type_name if type_name != "none" else args.data
 output_name = output_name if "/" not in output_name else output_name.split("/")[-1]
 
 with open(
-    f"/mnt/deepseekv2/eval_raw/resutls/mmlu/{output_name}.json", "w"
+    f"/mnt/deepseekv2/eval_raw/resutls/{output_name}.json", "w"
 ) as fw:
     json.dump(full_expert_dict, fw, indent=4)
 
