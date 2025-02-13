@@ -381,14 +381,13 @@ with open(f"./results/mmlu/{output_name}.json", "w") as fw:
     json.dump(full_expert_dict, fw, indent=4)
 
 """
-CUDA_VISIBLE_DEVICES=1 nohup python eval_qd_model.py piqa none test 3 --sub_one goal --sub_two sol1 --sub_three sol2 --task_idx 4 > ./log/qd/piqa.lb 2>&1 &
-
-CUDA_VISIBLE_DEVICES=6 nohup python eval_qd_model.py Rowan/hellaswag none test 3 --sub_one ctx_a --sub_two ctx_b --sub_three activity_label --task_idx 3 > ./log/qd/hellaswag.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=7 nohup python eval_qd_model.py winogrande winogrande_debiased test 3 --sub_one sentence --sub_two option1 --sub_three option2 --task_idx 0 > ./log/qd/winogrande_debiased.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=6 nohup python eval_qd_model.py truthful_qa generation validation 2 --sub_one question --sub_two best_answer --task_idx 1 > ./log/qd/generation.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=7 nohup python eval_qd_model.py truthful_qa multiple_choice validation 3 --sub_one question --sub_two mc1_targets --sub_three mc2_targets --task_idx 1 > ./log/qd/multiple_choice.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=6 nohup python eval_qd_model.py gsm8k main test 2 --sub_one question --sub_two answer --task_idx 2 > ./log/qd/main.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=7 nohup python eval_qd_model.py gsm8k socratic test 2 --sub_one question --sub_two answer --task_idx 2 > ./log/qd/socratic.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=1 nohup python eval_qd_model.py piqa none test 3 --sub_one goal --sub_two sol1 --sub_three sol2 --task_idx 4 > ./log/piqa.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=6 nohup python eval_qd_model.py Rowan/hellaswag none test 3 --sub_one ctx_a --sub_two ctx_b --sub_three activity_label --task_idx 3 > ./log/hellaswag.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=7 nohup python eval_qd_model.py winogrande winogrande_debiased test 3 --sub_one sentence --sub_two option1 --sub_three option2 --task_idx 0 > ./log/winogrande_debiased.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=6 nohup python eval_qd_model.py truthful_qa generation validation 2 --sub_one question --sub_two best_answer --task_idx 1 > ./log/generation.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=7 nohup python eval_qd_model.py truthful_qa multiple_choice validation 3 --sub_one question --sub_two mc1_targets --sub_three mc2_targets --task_idx 1 > ./log/multiple_choice.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=6 nohup python eval_qd_model.py gsm8k main test 2 --sub_one question --sub_two answer --task_idx 2 > ./log/main.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=7 nohup python eval_qd_model.py gsm8k socratic test 2 --sub_one question --sub_two answer --task_idx 2 > ./log/socratic.lb 2>&1 &
 
 """
 """
