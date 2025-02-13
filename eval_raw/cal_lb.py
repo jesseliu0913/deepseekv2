@@ -35,7 +35,7 @@ def get_expert(file_data, expert_num=64):
         layer_gap_dict[layer_index] = gap
     return layer_gap_dict, max_expert_lst
 
-folder_path = "./results"
+folder_path = "./results/math"
 files = os.listdir(folder_path)
 print(files)
 for file in files:
