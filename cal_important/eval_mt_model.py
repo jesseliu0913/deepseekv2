@@ -147,9 +147,9 @@ with open(
 
 
 """
-CUDA_VISIBLE_DEVICES=0,4 nohup python eval_mt_model.py winogrande winogrande_debiased test 3 --sub_one sentence --sub_two option1 --sub_three option2 > ./log/raw/winogrande_debiased.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=4,0 nohup python eval_mt_model.py Rowan/hellaswag none test 3 --sub_one ctx_a --sub_two ctx_b --sub_three activity_label > ./log/raw/hellaswag.lb 2>&1 &
-CUDA_VISIBLE_DEVICES=6,7 nohup python eval_mt_model.py truthful_qa generation validation 2 --sub_one question --sub_two best_answer > ./log/raw/generation.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=0,2 nohup python eval_mt_model.py winogrande winogrande_debiased test 3 --sub_one sentence --sub_two option1 --sub_three option2 > ./log/raw/winogrande_debiased.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=2,0 nohup python eval_mt_model.py Rowan/hellaswag none test 3 --sub_one ctx_a --sub_two ctx_b --sub_three activity_label > ./log/raw/hellaswag.lb 2>&1 &
+CUDA_VISIBLE_DEVICES=3,6 nohup python eval_mt_model.py truthful_qa generation validation 2 --sub_one question --sub_two best_answer > ./log/raw/generation.lb 2>&1 &
 CUDA_VISIBLE_DEVICES=1,3 nohup python eval_mt_model.py truthful_qa multiple_choice validation 3 --sub_one question --sub_two mc1_targets --sub_three mc2_targets > ./log/raw/multiple_choice.lb 2>&1 &
 CUDA_VISIBLE_DEVICES=5,1 nohup python eval_mt_model.py gsm8k main test 2 --sub_one question --sub_two answer > ./log/raw/main.lb 2>&1 &
 CUDA_VISIBLE_DEVICES=3,6 nohup python eval_mt_model.py gsm8k socratic test 2 --sub_one question --sub_two answer > ./log/raw/socratic.lb 2>&1 &
