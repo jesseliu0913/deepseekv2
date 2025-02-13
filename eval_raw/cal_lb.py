@@ -16,8 +16,8 @@ def get_expert(file_data, expert_num=64):
         token_info = file_data[key]
         for layer_index, layer_info in enumerate(token_info):
             layer_info = flatten_2d_list(layer_info)
-            if layer_index != 26:
-                layer_full_lst[layer_index].extend(layer_info)
+            # if layer_index != 26:
+            #     layer_full_lst[layer_index].extend(layer_info)
 
     total_token_lst = []
     for layer_index, layer_info in enumerate(layer_full_lst):
