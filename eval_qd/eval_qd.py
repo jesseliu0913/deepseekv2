@@ -16,7 +16,7 @@ from datasets import load_dataset
 from deepspeed.pipe import PipelineModule
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 from torch.utils.data import DataLoader, Dataset, random_split
-from modeling_deepseek import DeepseekMLP
+from modeling_deepseek import DeepseekV2MLP
 
 
 parser = argparse.ArgumentParser(description="DEEPSEEK")
@@ -112,7 +112,7 @@ def get_expert(file_data, expert_num=64):
     return max_expert_lst, layer_gap_dict
 
 
-expert_folder = f"/mnt/deepseek/eval_raw/results/raw/{folder_name}"
+expert_folder = f"../eval_raw/results/{folder_name}"
 expert_data = json.load(open(os.path.join(expert_folder, f"{output_name}.json")))
 length = int(len(expert_data) * 0.1)
 expert_ls = dict(islice(expert_data.items(), length))
@@ -122,47 +122,83 @@ print(layer_gap_dict)
 print(np.mean(np.array(list(layer_gap_dict.values()))))
 
 
-# Duplicate and Quant
 class DuplicateMoEGate(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
         self.top_k = config.num_experts_per_tok
         self.n_routed_experts = config.n_routed_experts
-
+        self.routed_scaling_factor = config.routed_scaling_factor
         self.scoring_func = config.scoring_func
         self.alpha = config.aux_loss_alpha
         self.seq_aux = config.seq_aux
+        self.topk_method = config.topk_method
+        self.n_group = config.n_group
+        self.topk_group = config.topk_group
 
         # topk selection algorithm
         self.norm_topk_prob = config.norm_topk_prob
         self.gating_dim = config.hidden_size
-        self.weight = nn.Parameter(torch.empty((self.n_routed_experts, self.gating_dim), dtype=torch.bfloat16))
-        self.reset_parameters()
+        self.weight = nn.Parameter(
+            torch.empty((self.n_routed_experts, self.gating_dim))
+        )
         self.max_expert = 0
+        self.reset_parameters()
+        
 
     def reset_parameters(self) -> None:
-        import torch.nn.init  as init
+        import torch.nn.init as init
+
         init.kaiming_uniform_(self.weight, a=math.sqrt(5))
-    
+
     def forward(self, hidden_states):
-        bsz, seq_len, h = hidden_states.shape        
+        bsz, seq_len, h = hidden_states.shape
         ### compute gating score
         hidden_states = hidden_states.view(-1, h)
-        logits = F.linear(hidden_states, self.weight, None)
-        if self.scoring_func == 'softmax':
-            scores = logits.softmax(dim=-1)
+        logits = F.linear(
+            hidden_states.type(torch.float32), self.weight.type(torch.float32), None
+        )
+        if self.scoring_func == "softmax":
+            scores = logits.softmax(dim=-1, dtype=torch.float32)
         else:
-            raise NotImplementedError(f'insupportable scoring function for MoE gating: {self.scoring_func}')
-        
-        ### select top-k experts 
-        topk_weight, topk_idx = torch.topk(scores, k=self.top_k, dim=-1, sorted=False)
-                
+            raise NotImplementedError(
+                f"insupportable scoring function for MoE gating: {self.scoring_func}"
+            )
+
+        ### select top-k experts
+        if self.topk_method == "greedy":
+            topk_weight, topk_idx = torch.topk(
+                scores, k=self.top_k, dim=-1, sorted=False
+            )
+        elif self.topk_method == "group_limited_greedy":
+            group_scores = (
+                scores.view(bsz * seq_len, self.n_group, -1).max(dim=-1).values
+            )  # [n, n_group]
+            group_idx = torch.topk(
+                group_scores, k=self.topk_group, dim=-1, sorted=False
+            )[
+                1
+            ]  # [n, top_k_group]
+            group_mask = torch.zeros_like(group_scores)  # [n, n_group]
+            group_mask.scatter_(1, group_idx, 1)  # [n, n_group]
+            score_mask = (
+                group_mask.unsqueeze(-1)
+                .expand(
+                    bsz * seq_len, self.n_group, self.n_routed_experts // self.n_group
+                )
+                .reshape(bsz * seq_len, -1)
+            )  # [n, e]
+            tmp_scores = scores.masked_fill(~score_mask.bool(), 0.0)  # [n, e]
+            topk_weight, topk_idx = torch.topk(
+                tmp_scores, k=self.top_k, dim=-1, sorted=False
+            )
+
         ### norm gate to sum 1
         if self.top_k > 1 and self.norm_topk_prob:
             denominator = topk_weight.sum(dim=-1, keepdim=True) + 1e-20
             topk_weight = topk_weight / denominator
-
+        else:
+            topk_weight = topk_weight * self.routed_scaling_factor
         ### expert-level computation auxiliary loss
         if self.training and self.alpha > 0.0:
             scores_for_aux = scores
@@ -171,18 +207,27 @@ class DuplicateMoEGate(nn.Module):
             topk_idx_for_aux_loss = topk_idx.view(bsz, -1)
             if self.seq_aux:
                 scores_for_seq_aux = scores_for_aux.view(bsz, seq_len, -1)
-                ce = torch.zeros(bsz, self.n_routed_experts, device=hidden_states.device)
-                ce.scatter_add_(1, topk_idx_for_aux_loss, torch.ones(bsz, seq_len * aux_topk, device=hidden_states.device)).div_(seq_len * aux_topk / self.n_routed_experts)
-                aux_loss = (ce * scores_for_seq_aux.mean(dim = 1)).sum(dim = 1).mean() * self.alpha
+                ce = torch.zeros(
+                    bsz, self.n_routed_experts, device=hidden_states.device
+                )
+                ce.scatter_add_(
+                    1,
+                    topk_idx_for_aux_loss,
+                    torch.ones(bsz, seq_len * aux_topk, device=hidden_states.device),
+                ).div_(seq_len * aux_topk / self.n_routed_experts)
+                aux_loss = (ce * scores_for_seq_aux.mean(dim=1)).sum(
+                    dim=1
+                ).mean() * self.alpha
             else:
-                mask_ce = F.one_hot(topk_idx_for_aux_loss.view(-1), num_classes=self.n_routed_experts)
+                mask_ce = F.one_hot(
+                    topk_idx_for_aux_loss.view(-1), num_classes=self.n_routed_experts
+                )
                 ce = mask_ce.float().mean(0)
                 Pi = scores_for_aux.mean(0)
                 fi = ce * self.n_routed_experts
                 aux_loss = (Pi * fi).sum() * self.alpha
         else:
             aux_loss = None
-
 
         target_value = 64
         mask = (topk_idx == self.max_expert) | (topk_idx == target_value)
@@ -191,47 +236,30 @@ class DuplicateMoEGate(nn.Module):
                                          torch.tensor(target_value, device=topk_idx.device))
 
         topk_idx = torch.where(mask, replacement_values, topk_idx)
-        
         return topk_idx, topk_weight, aux_loss
+        
 
 class QuantDeepseekMLP(nn.Module):
-    def __init__(self, config, hidden_size = None, intermediate_size = None):
+    def __init__(self, config, hidden_size=None, intermediate_size=None):
         super().__init__()
         self.config = config
         self.hidden_size = config.hidden_size if hidden_size is None else hidden_size
-        self.intermediate_size = config.intermediate_size if intermediate_size is None else intermediate_size
+        self.intermediate_size = (
+            config.intermediate_size if intermediate_size is None else intermediate_size
+        )
 
         self.gate_proj = Linear8bitLt(self.hidden_size, self.intermediate_size, bias=False)
         self.up_proj = Linear8bitLt(self.hidden_size, self.intermediate_size, bias=False)
         self.down_proj = Linear8bitLt(self.intermediate_size, self.hidden_size, bias=False)
-
         self.act_fn = ACT2FN[config.hidden_act]
 
     def forward(self, x):
-        if self.config.pretraining_tp > 1:
-            slice = self.intermediate_size // self.config.pretraining_tp
-            gate_proj_slices = self.gate_proj.weight.split(slice, dim=0)
-            up_proj_slices = self.up_proj.weight.split(slice, dim=0)
-            down_proj_slices = self.down_proj.weight.split(slice, dim=1)
-
-            gate_proj = torch.cat(
-                [F.linear(x, gate_proj_slices[i]) for i in range(self.config.pretraining_tp)], dim=-1
-            )
-            up_proj = torch.cat([F.linear(x, up_proj_slices[i]) for i in range(self.config.pretraining_tp)], dim=-1)
-
-            intermediate_states = (self.act_fn(gate_proj) * up_proj).split(slice, dim=2)
-            down_proj = [
-                F.linear(intermediate_states[i], down_proj_slices[i]) for i in range(self.config.pretraining_tp)
-            ]
-            down_proj = sum(down_proj)
-        else:
-            down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
-
+        down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
         return down_proj
+        
 
-
-for idx in range(0, 27):
-    # module original layers list in [1, 27] total 27 layers have gates
+for idx in range(0, 26):
+    # module original layers list in [1, 26] total 26 layers have gates
     quant_expert = int(quant_lst[idx])
     duplicate_expert = int(max_expert_lst[idx])
     config = model.config
@@ -254,7 +282,7 @@ for key in list(raw_state_dict.keys()):
     new_state_dict[key] = raw_state_dict[key]
 
 duplicate_keyname = []
-for key_idx in range(0, 27):
+for key_idx in range(0, 26):
     duplicate_expert = max_expert_lst[key_idx]
     layer_idx = key_idx + 1
     
@@ -349,7 +377,7 @@ with torch.no_grad():
 
 
 
-with open(f"/mnt/deepseek/pipeline/results_01/mmlu/{output_name}.json", "w") as fw:
+with open(f"./results/mmlu/{output_name}.json", "w") as fw:
     json.dump(full_expert_dict, fw, indent=4)
 
 """
