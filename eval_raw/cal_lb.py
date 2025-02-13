@@ -54,5 +54,5 @@ for file in files:
     score += np.mean(np.array(list(layer_gap_dict.values())))
     # print(np.mean(np.array(list(layer_gap_dict.values()))))
 
-print(list(np.argmin(np.sum(np.array(token_lst), axis=0), axis=-1)))
+print(list(np.argmax(np.sum(np.array(token_lst), axis=0), axis=-1)))
 print(score / count)
