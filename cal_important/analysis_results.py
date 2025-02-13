@@ -12,9 +12,8 @@ for file in files:
   score_lst_sep = []
   file_data = json.load(open(os.path.join(folder_path, file), "r"))
   print(file_data['26'])
-  
+  print(len(list(file_data.keys())))
   for key in list(file_data.keys()):
-    print(len(file_data[key]))
     score_dict[int(key)] += np.mean(np.array(file_data[key]), axis=1)
     score_lst_sep.append(np.argmax(np.mean(np.array(file_data[key]), axis=1)))
   print(score_lst_sep)
