@@ -38,7 +38,7 @@ def get_expert(file_data, expert_num=64):
         layer_gap_dict[layer_index] = gap
     return max_expert_lst, layer_gap_dict, total_token_lst
 
-folder_path = "/mnt/deepseek/eval_raw/results/raw/other"
+folder_path = "/mnt/deepseek/eval_raw/results/math"
 count = 0
 score = 0
 token_lst = []
