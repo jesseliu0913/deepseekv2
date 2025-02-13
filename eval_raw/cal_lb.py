@@ -52,7 +52,7 @@ for file in files:
     token_lst.append(total_token_lst)
     print(max_expert_lst)
     score += np.mean(np.array(list(layer_gap_dict.values())))
-    print(np.mean(np.array(list(layer_gap_dict.values()))))
+    # print(np.mean(np.array(list(layer_gap_dict.values()))))
 
 print(list(np.argmin(np.sum(np.array(token_lst), axis=0), axis=-1)))
 print(score / count)
