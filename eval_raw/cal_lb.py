@@ -33,12 +33,13 @@ def get_expert(file_data, expert_num=64):
         gap = max_expert_tokens / average_expert
 
         layer_gap_dict[layer_index] = gap
-    return layer_gap_dict
+    return layer_gap_dict, max_expert_lst
 
 folder_path = "./results"
 files = os.listdir(folder_path)
 print(files)
 for file in files:
   json_data = json.load(open(os.path.join(folder_path, file), "r"))
-  layer_gap_dict = get_expert(json_data, expert_num=64)
+  layer_gap_dict, max_expert_lst = get_expert(json_data, expert_num=64)
+  print(max_expert_lst)
   print(np.means(np.array(list(layer_gap_dict.values))))
