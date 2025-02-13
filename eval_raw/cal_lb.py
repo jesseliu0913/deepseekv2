@@ -41,4 +41,4 @@ for file in files:
   json_data = json.load(open(os.path.join(folder_path, file), "r"))
   layer_gap_dict, max_expert_lst = get_expert(json_data, expert_num=64)
   print(max_expert_lst)
-  print(np.means(np.array(list(layer_gap_dict.values))))
+  print(np.mean(np.array(list(layer_gap_dict.values()))))
