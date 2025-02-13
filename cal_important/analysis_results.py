@@ -5,7 +5,7 @@ import numpy as np
 
 folder_path = "./resutls/math"
 files = os.listdir(folder_path)
-score_dict = {i: [0 for _ in range(64)] for i in range(26)}
+score_dict = {i: [0 for _ in range(64)] for i in range(27)}
 
 for file in files:
   print(file)
