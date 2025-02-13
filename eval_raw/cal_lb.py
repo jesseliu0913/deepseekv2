@@ -32,8 +32,8 @@ def get_expert(file_data, expert_num=64):
         max_expert_tokens = expert_count_list[max_expert]
         max_expert_lst.append(max_expert)
         total_token_lst.append(expert_count_list)
-        print(max_expert_tokens)
-        print(average_expert)
+        # print(max_expert_tokens)
+        # print(average_expert)
         gap = max_expert_tokens / average_expert
 
         layer_gap_dict[layer_index] = gap
