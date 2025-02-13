@@ -271,7 +271,7 @@ for idx in range(0, 26):
     hidden_size = model.model.layers[idx+1].mlp.experts[quant_expert].hidden_size
     intermediate_size = model.model.layers[idx+1].mlp.experts[quant_expert].intermediate_size
 
-    model.model.layers[idx+1].mlp.experts = nn.ModuleList([DeepseekMLP(config, intermediate_size = config.moe_intermediate_size) for i in range(config.n_routed_experts + 1)]).bfloat16()
+    model.model.layers[idx+1].mlp.experts = nn.ModuleList([DeepseekV2MLP(config, intermediate_size = config.moe_intermediate_size) for i in range(config.n_routed_experts + 1)]).bfloat16()
     model.model.layers[idx+1].mlp.experts[quant_expert] = QuantDeepseekMLP(config=config, hidden_size=hidden_size, intermediate_size=intermediate_size)
     model.model.layers[idx+1].mlp.experts[64] = QuantDeepseekMLP(config=config, hidden_size=hidden_size, intermediate_size=intermediate_size)
 
