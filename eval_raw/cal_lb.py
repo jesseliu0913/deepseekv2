@@ -9,7 +9,7 @@ def flatten_2d_list(twd_list):
 def get_expert(file_data, expert_num=64):
     layer_gap_dict = {}
     max_expert_lst = []
-    layer_full_lst = [[] for idx in range(26)]
+    layer_full_lst = [[] for idx in range(25)]
     length = int(len(list(file_data.keys())) * 0.1 )
     print("length is", len(list(file_data.keys())[0:length]))
     for key in list(file_data.keys())[0:length]:
