@@ -11,7 +11,7 @@ for file in files:
   print(file)
   score_lst_sep = []
   file_data = json.load(open(os.path.join(folder_path, file), "r"))
-  print(file_data['16'])
+  print(file_data['26'])
   
   for key in list(file_data.keys()):
     score_dict[int(key)] += np.mean(np.array(file_data[key]), axis=1)
