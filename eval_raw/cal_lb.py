@@ -9,7 +9,7 @@ def flatten_2d_list(twd_list):
 def get_expert(file_data, expert_num=64):
     layer_gap_dict = {}
     max_expert_lst = []
-    layer_full_lst = [[] for idx in range(25)]
+    layer_full_lst = [[] for idx in range(27)]
 
     for key in list(file_data.keys()):
         token_info = file_data[key]
@@ -29,7 +29,7 @@ def get_expert(file_data, expert_num=64):
         max_expert_tokens = expert_count_list[max_expert]
         max_expert_lst.append(max_expert)
 
-        gap = max_expert_tokens / average_expert
+        gap = max_expert_tokens / average_expert if average_expert != 0 else 0
 
         layer_gap_dict[layer_index] = gap
     return layer_gap_dict, max_expert_lst
