@@ -377,7 +377,7 @@ with torch.no_grad():
 
 
 
-with open(f"./results/mmlu/{output_name}.json", "w") as fw:
+with open(f"./results/{output_name}.json", "w") as fw:
     json.dump(full_expert_dict, fw, indent=4)
 
 """
