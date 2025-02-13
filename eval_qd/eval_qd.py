@@ -41,7 +41,7 @@ device = torch.device("cuda")
 
 # torch.cuda.set_per_process_memory_fraction(0.5, device=0)
 # define model
-model_name = "deepseek-ai/deepseek-moe-16b-base"
+model_name = "deepseek-ai/DeepSeek-V2-Lite"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.bfloat16,  trust_remote_code=True)
 model.generation_config = GenerationConfig.from_pretrained(model_name)
@@ -84,7 +84,7 @@ def flatten_2d_list(twd_list):
 def get_expert(file_data, expert_num=64):
     layer_gap_dict = {}
     max_expert_lst = []
-    layer_full_lst = [[] for idx in range(27)]
+    layer_full_lst = [[] for idx in range(26)]
 
     for key in list(file_data.keys()):
         token_info = file_data[key]
