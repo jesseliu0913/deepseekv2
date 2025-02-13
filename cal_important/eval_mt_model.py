@@ -66,6 +66,8 @@ def get_layer_output(module, input, output):
 type_name = args.dataset 
 dataset = load_dataset(args.data, type_name) if type_name != 'none' else load_dataset(args.data)
 test_data = dataset[args.subset]
+length = int(len(test_data)* 0.2)
+test_data = dataset[args.subset][0:length]
 
 output_name = type_name if type_name != "none" else args.data
 output_name = output_name if "/" not in output_name else output_name.split("/")[-1]
@@ -95,6 +97,7 @@ ax_dataset = GLUEDataset(full_sentence)
 ax_dataloader = DataLoader(
     ax_dataset, batch_size=1, shuffle=False, collate_fn=collate_fn
 )
+
 
 expert_dict = {i:[[] for _ in range(64)]for i in range(27)}
 full_expert_dict = {}
@@ -137,7 +140,7 @@ output_name = type_name if type_name != "none" else args.data
 output_name = output_name if "/" not in output_name else output_name.split("/")[-1]
 
 with open(
-    f"./resutls/{output_name}.json", "w"
+    f"./resutls02/{output_name}.json", "w"
 ) as fw:
     json.dump(expert_dict, fw, indent=4)
 
