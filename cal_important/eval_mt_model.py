@@ -140,7 +140,7 @@ output_name = type_name if type_name != "none" else args.data
 output_name = output_name if "/" not in output_name else output_name.split("/")[-1]
 
 with open(
-    f"./resutls02/{output_name}.json", "w"
+    f"./results02/{output_name}.json", "w"
 ) as fw:
     json.dump(expert_dict, fw, indent=4)
 
