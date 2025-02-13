@@ -11,9 +11,10 @@ def get_expert(file_data, expert_num=64):
     max_expert_lst = []
     layer_full_lst = [[] for idx in range(26)]
     length = int(len(list(file_data.keys())) * 0.1 )
-    # print("length is", len(list(file_data.keys())[0:length]))
+    print("length is", len(list(file_data.keys())[0:length]))
     for key in list(file_data.keys())[0:length]:
         token_info = file_data[key]
+        print(len(token_info))
         for layer_index, layer_info in enumerate(token_info):
             layer_info = flatten_2d_list(layer_info)
             # if layer_index != 26:
