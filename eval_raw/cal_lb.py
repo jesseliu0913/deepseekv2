@@ -28,7 +28,7 @@ def get_expert(file_data, expert_num=64):
         average_expert = sample_nums / expert_num
         expert_count_list = [expert_quant.count(i) for i in range(expert_num)]
 
-        max_expert = np.argmin(expert_count_list)
+        max_expert = np.argmax(expert_count_list)
         max_expert_tokens = expert_count_list[max_expert]
         max_expert_lst.append(max_expert)
         total_token_lst.append(expert_count_list)
