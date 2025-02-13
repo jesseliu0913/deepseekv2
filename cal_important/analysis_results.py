@@ -3,7 +3,7 @@ import json
 import numpy as np
 
 
-folder_path = "./resutls02/math"
+folder_path = "./results02/math"
 files = os.listdir(folder_path)
 score_dict = {i: [0 for _ in range(64)] for i in range(27)}
 
