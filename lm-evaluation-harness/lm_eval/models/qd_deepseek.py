@@ -1452,10 +1452,10 @@ class QauntDuplicateDeepSeek(TemplateLM):
 
 """
 # winogrande_debiased truthfulqa math hellaswag piqa mmlu
-CUDA_VISIBLE_DEVICES=0 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/deepseek-moe-16b-base;0;0",trust_remote_code=True  --tasks winogrande --batch_size auto > /mnt/lm-evaluation-harness/results/deepseek/qd_01/winogrande.txt 2>&1 &
-CUDA_VISIBLE_DEVICES=1 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/deepseek-moe-16b-base;1;1",trust_remote_code=True  --tasks truthfulqa --batch_size 1 > /mnt/lm-evaluation-harness/results/deepseek/qd_01/truthfulqa.txt 2>&1 &
-CUDA_VISIBLE_DEVICES=2 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/deepseek-moe-16b-base;2;2",trust_remote_code=True  --tasks gsm8k --num_fewshot 5 --batch_size 1 > /mnt/lm-evaluation-harness/results/deepseek/qd_01/gsm8k.txt 2>&1 &
-CUDA_VISIBLE_DEVICES=3 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/deepseek-moe-16b-base;3;3",trust_remote_code=True  --tasks hellaswag --num_fewshot 10 --batch_size auto > /mnt/lm-evaluation-harness/results/deepseek/qd_01/hellaswag.txt 2>&1 &
-CUDA_VISIBLE_DEVICES=7 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/deepseek-moe-16b-base;4;4",trust_remote_code=True  --tasks piqa --batch_size auto > /mnt/lm-evaluation-harness/results/deepseek/qd_01/piqa.txt 2>&1 &
-CUDA_VISIBLE_DEVICES=7 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/deepseek-moe-16b-base;5;5",trust_remote_code=True  --tasks mmlu --num_fewshot 5 --batch_size auto > /mnt/lm-evaluation-harness/results/deepseek/qd_01/mmlu.txt 2>&1 &
+CUDA_VISIBLE_DEVICES=0 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/DeepSeek-V2-Lite;0;0",trust_remote_code=True  --tasks winogrande --batch_size auto > ./results/deepseek/winogrande.txt 2>&1 &
+CUDA_VISIBLE_DEVICES=1 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/DeepSeek-V2-Lite;1;1",trust_remote_code=True  --tasks truthfulqa --batch_size 1 > ./results/deepseek/truthfulqa.txt 2>&1 &
+CUDA_VISIBLE_DEVICES=2 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/DeepSeek-V2-Lite;2;2",trust_remote_code=True  --tasks gsm8k --num_fewshot 5 --batch_size 1 > ./results/deepseek/gsm8k.txt 2>&1 &
+CUDA_VISIBLE_DEVICES=3 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/DeepSeek-V2-Lite;3;3",trust_remote_code=True  --tasks hellaswag --num_fewshot 10 --batch_size auto > ./results/deepseek/hellaswag.txt 2>&1 &
+CUDA_VISIBLE_DEVICES=7 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/DeepSeek-V2-Lite;4;4",trust_remote_code=True  --tasks piqa --batch_size auto > ./results/deepseek/piqa.txt 2>&1 &
+CUDA_VISIBLE_DEVICES=7 nohup lm_eval --model qd_deepseek  --model_args pretrained="deepseek-ai/DeepSeek-V2-Lite;5;5",trust_remote_code=True  --tasks mmlu --num_fewshot 5 --batch_size auto > ./results/deepseek/mmlu.txt 2>&1 &
 """
