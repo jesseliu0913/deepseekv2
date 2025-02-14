@@ -1,14 +1,8 @@
 nohup: ignoring input
-[2025-02-13 22:35:40,049] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-02-13 23:25:39,238] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
 /root/anaconda3/envs/deepseek/lib/python3.10/site-packages/huggingface_hub/file_download.py:795: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
   warnings.warn(
 Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-A new version of the following files was downloaded from https://huggingface.co/deepseek-ai/deepseek-moe-16b-base:
-- configuration_deepseek.py
-. Make sure to double-check they do not contain any added malicious code. To avoid downloading new versions of the code file, you can pin a revision.
-A new version of the following files was downloaded from https://huggingface.co/deepseek-ai/deepseek-moe-16b-base:
-- modeling_deepseek.py
-. Make sure to double-check they do not contain any added malicious code. To avoid downloading new versions of the code file, you can pin a revision.
 [93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
 [93m [WARNING] [0m async_io: please install the libaio-dev package with apt
 [93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
@@ -16,5 +10,9 @@ A new version of the following files was downloaded from https://huggingface.co/
 [93m [WARNING] [0m NVIDIA Inference is only supported on Ampere and newer architectures
 [93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
 [93m [WARNING] [0m using untested triton version (2.3.0), only 1.0.0 is known to be compatible
-Downloading shards:   0%|          | 0/7 [00:00<?, ?it/s]Downloading shards:  14%|█▍        | 1/7 [01:59<11:56, 119.45s/it]Downloading shards:  29%|██▊       | 2/7 [03:58<09:56, 119.31s/it]Downloading shards:  43%|████▎     | 3/7 [05:57<07:56, 119.17s/it]Downloading shards:  57%|█████▋    | 4/7 [07:56<05:57, 119.10s/it]/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/huggingface_hub/file_download.py:651: UserWarning: Not enough free disk space to download the file. The expected file size is: 4997.13 MB. The target location /root/.cache/huggingface/hub/models--deepseek-ai--deepseek-moe-16b-base/blobs only has 3868.67 MB free disk space.
-  warnings.warn(
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [02:11<06:33, 131.30s/it]Loading checkpoint shards:  50%|█████     | 2/4 [04:34<04:36, 138.38s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [06:37<02:11, 131.39s/it]Loading checkpoint shards: 100%|██████████| 4/4 [07:49<00:00, 107.96s/it]Loading checkpoint shards: 100%|██████████| 4/4 [07:49<00:00, 117.44s/it]
+/root/anaconda3/envs/deepseek/lib/python3.10/site-packages/bitsandbytes/autograd/_functions.py:316: UserWarning: MatMul8bitLt: inputs will be cast from torch.bfloat16 to float16 during quantization
+  warnings.warn(f"MatMul8bitLt: inputs will be cast from {A.dtype} to float16 during quantization")
+-------------------------------------check expert choice and dict------------------------------------
+{0: 4.969162995594714, 1: 1.9957578724098548, 2: 3.2383749388154675, 3: 3.699135258606624, 4: 3.270354054495024, 5: 3.5516397454723445, 6: 5.080110947952358, 7: 5.848262359275575, 8: 5.608092674171969, 9: 6.388644150758688, 10: 4.856909773209333, 11: 3.911241638113885, 12: 4.45945504976342, 13: 3.308859520313265, 14: 4.575624082232012, 15: 4.24278022515908, 16: 3.457007668461413, 17: 5.879588839941263, 18: 3.387175721977484, 19: 2.9016152716593244, 20: 2.751509218469571, 21: 3.815304291075216, 22: 5.093163648229727, 23: 6.173274596182085, 24: 4.16054821341165, 25: 5.091858378201991}
+4.296748120536667
