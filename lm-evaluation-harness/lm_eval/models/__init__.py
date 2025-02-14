@@ -16,6 +16,9 @@ from . import (
     textsynth,
     vllm_causallms,
     vllm_vlms,
+    qd_deepseek,
+    modeling_deepseek,
+    configuration_deepseek,
 )
 
 
